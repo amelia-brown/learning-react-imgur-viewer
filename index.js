@@ -1,6 +1,20 @@
 var express = require('express');
 var path = require('path');
 
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
+fetch('https://api.imgur.com/3/gallery/hot/viral/0.json')
+  .then(function(response) {
+    if (response.status >= 400) {
+      throw new Error("Bad response from server");
+    }
+    return response.json();
+  })
+  .then(function(stories) {
+    console.log(stories);
+  });
+
 const ENV = process.env.NODE_ENV || 'development';
 const PORT = process.env.PORT || 3000;
 const ROOT_PATH = path.resolve(__dirname);

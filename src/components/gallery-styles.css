@@ -1,0 +1,31 @@
+.imgrContainer {
+  display: inline-block;
+  width: 290px;
+  height: 150px;
+  margin: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.blank {
+  display: none;
+}
+.imgrImg {
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+}
+.imgrContainer:hover {
+  background: rgba(0,0,0,0.5);
+}
+.galleryContainer {
+  width: 100%;
+  margin: 0 auto;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  display: -webkit-inline-flex;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: center;
+  -webkit-flex-wrap: wrap;
+}

@@ -14,7 +14,7 @@ export default class Greeting extends Component {
       <div className={styles.classbase}
         styleName='base'>
         <p>
-          Bonjour, {this.props.name}
+          Hello, {this.props.name}
         </p>
       </div>
     );
