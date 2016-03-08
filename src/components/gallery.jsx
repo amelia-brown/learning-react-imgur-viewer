@@ -11,8 +11,12 @@ export default class Gallery extends Component {
   };
 
   componentWillMount() {
+    return this.componentUpdate(0);
+  }
+
+  function componentUpdate(pageNumber){
     const xhttp = new XMLHttpRequest();
-    xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/0.json');
+    xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/' + {pageNumber} + '.json');
     xhttp.setRequestHeader('Authorization', 'Client-ID 5e15c36c60713b8');
 
     xhttp.onreadystatechange = function() {
@@ -21,6 +25,7 @@ export default class Gallery extends Component {
       }
     }.bind(this);
     xhttp.send();
+  }
   }
 
   render () {
@@ -38,14 +43,17 @@ export default class Gallery extends Component {
       );
     })
     return (
-      <div className={styles.classbase}
-       styleName="galleryContainer">
-        {elements}
-        <div
-          styleName={this.state.modal === "" ? "modalHidden" : "modalShowing"}
-          onClick={::this.handleClickOff}>
-          <img src={this.state.modal} styleName="modal" />
+      <div className="main">
+        <div className={styles.classbase}
+          styleName="galleryContainer">
+            {elements}
+          <div
+            styleName={this.state.modal === "" ? "modalHidden" : "modalShowing"}
+            onClick={::this.handleClickOff}>
+            <img src={this.state.modal} styleName="modal" />
+          </div>
         </div>
+        <button styleName="showMore" onClick={::this.showMore}>Show more</button>
       </div>
     );
   }
@@ -55,4 +63,32 @@ export default class Gallery extends Component {
   handleClickOff(e) {
     return this.setState({modal: ""});
   }
+  showMore(e) {
+    return this.componentUpdate(1);
+  }
 }
+
+
+
+/*
+ummm
+possibly
+but it may be easier just to keep track of the page
+so one thing you could do is move the xhttp request to its own function
+pass it a page number
+and let it handle updating the state when you call it
+
+so like onClick => increment page number => fetchData(pageNumber) => it updates the state => view updates automatically
+on your initial one
+you can have state.page = 1
+and just call in the componentWillMount() { this.fetch(this.state.page) }
+sorta thing
+
+so in your fetch when you get the results back
+take the value of the current this.state.data and join it with the new results
+then use that to set the state of data to the joined array
+right?
+ *
+ *
+ *
+ * */
