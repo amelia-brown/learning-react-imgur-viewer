@@ -9,13 +9,19 @@ export default class Gallery extends Component {
     data: [],
     modal: "",
     page: 0,
+    max: 5,
   };
 
   componentWillMount() {
     return this.fetchData(this.state.page);
   }
-
-  fetchData(pageNumber){
+  filterAlbum(item) {
+    return !item.is_album;
+  }
+//filterRepeat(item) {
+//  return !item.id === this.state.data.map(item.id);
+//}
+  fetchData(pageNumber) {
     const xhttp = new XMLHttpRequest();
     xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/' + pageNumber + '.json');
     xhttp.setRequestHeader('Authorization', 'Client-ID 5e15c36c60713b8');
@@ -27,17 +33,15 @@ export default class Gallery extends Component {
       }
     }.bind(this);
     xhttp.send();
+    return this.state.data;
   }
-
-
   render () {
-    var elements = this.state.data.map((item, index) => {
-      return (
+    var elements = this.state.data.filter(this.filterAlbum).slice(0, this.state.max).map((item, index) => {
+     return (
         <div
           onClick={::this.handleClick}
           data-link={item.link}
-          styleName={item.is_album === true ? "blank" : "imgrContainer"}
-          key={item.id}>
+          styleName="imgrContainer">
          <img
           src={item.link}
           styleName="imgrImg" />
@@ -66,8 +70,18 @@ export default class Gallery extends Component {
     return this.setState({modal: ""});
   }
   showMore(e) {
-    this.setState({page: this.state.page+1}, function() {
+    this.setState({max: this.state.max+5});
+    if (this.state.max >= this.state.data.length) {
+      this.setState({page: this.state.page+1});
       return this.fetchData(this.state.page);
-    });
+    }
+    return this.state.max;
   }
+  /*isEnough(e){
+    if (this.state.max >= this.state.data.length) {
+      this.setState({min: this.state.data.length});
+      this.setState({page: this.state.page+1});
+      return this.fetchData(this.state.page);
+    }
+  }*/
 }

@@ -27,7 +27,7 @@
   flex-wrap: wrap;
 }
 .modal {
-  width: 500px;
+  width: 400px;
   height: auto;
 }
 
@@ -40,7 +40,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-start: top;
   background: rgba(0,0,0,0.5);
+  overflow: scroll;
 }
 
 .modalShowing {
