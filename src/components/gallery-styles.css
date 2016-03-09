@@ -5,6 +5,7 @@
   margin: 5px;
   overflow: hidden;
   position: relative;
+  cursor: pointer;
 }
 .blank {
   display: none;

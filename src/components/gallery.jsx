@@ -8,25 +8,27 @@ export default class Gallery extends Component {
   state = {
     data: [],
     modal: "",
+    page: 0,
   };
 
   componentWillMount() {
-    return this.componentUpdate(0);
+    return this.fetchData(this.state.page);
   }
 
-  function componentUpdate(pageNumber){
+  fetchData(pageNumber){
     const xhttp = new XMLHttpRequest();
-    xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/' + {pageNumber} + '.json');
+    xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/' + pageNumber + '.json');
     xhttp.setRequestHeader('Authorization', 'Client-ID 5e15c36c60713b8');
 
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status === 200) {
-        this.setState({data: JSON.parse(xhttp['responseText']).data});
+        var newData = JSON.parse(xhttp.responseText).data;
+        this.setState({data: this.state.data.concat(newData)});
       }
     }.bind(this);
     xhttp.send();
   }
-  }
+
 
   render () {
     var elements = this.state.data.map((item, index) => {
@@ -64,31 +66,8 @@ export default class Gallery extends Component {
     return this.setState({modal: ""});
   }
   showMore(e) {
-    return this.componentUpdate(1);
+    this.setState({page: this.state.page+1}, function() {
+      return this.fetchData(this.state.page);
+    });
   }
 }
-
-
-
-/*
-ummm
-possibly
-but it may be easier just to keep track of the page
-so one thing you could do is move the xhttp request to its own function
-pass it a page number
-and let it handle updating the state when you call it
-
-so like onClick => increment page number => fetchData(pageNumber) => it updates the state => view updates automatically
-on your initial one
-you can have state.page = 1
-and just call in the componentWillMount() { this.fetch(this.state.page) }
-sorta thing
-
-so in your fetch when you get the results back
-take the value of the current this.state.data and join it with the new results
-then use that to set the state of data to the joined array
-right?
- *
- *
- *
- * */
