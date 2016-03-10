@@ -9,7 +9,8 @@ export default class Gallery extends Component {
     data: [],
     modal: "",
     page: 0,
-    max: 5,
+    max: 20,
+    modalIndex: 0,
   };
 
   componentWillMount() {
@@ -18,9 +19,6 @@ export default class Gallery extends Component {
   filterAlbum(item) {
     return !item.is_album;
   }
-//filterRepeat(item) {
-//  return !item.id === this.state.data.map(item.id);
-//}
   fetchData(pageNumber) {
     const xhttp = new XMLHttpRequest();
     xhttp.open('GET', 'https://api.imgur.com/3/gallery/hot/viral/' + pageNumber + '.json');
@@ -28,20 +26,57 @@ export default class Gallery extends Component {
 
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status === 200) {
-        var newData = JSON.parse(xhttp.responseText).data;
+        var newData = JSON.parse(xhttp.responseText).data.filter(this.filterAlbum);
         this.setState({data: this.state.data.concat(newData)});
       }
     }.bind(this);
     xhttp.send();
     return this.state.data;
   }
+  handleClick(e) {
+    return this.setState({modal: e.target.dataset.link, modalIndex: e.target.dataset.index});
+  }
+  handleClickOff(e) {
+    return this.setState({modal: ""});
+  }
+  showMore(e) {
+    this.setState({max: this.state.max+4}, () => {
+      if (this.state.data.length <= this.state.max) {
+        this.setState({page: this.state.page+1}, () => {
+         console.log("fetch Called", this.state);
+         return this.fetchData(this.state.page);
+
+        });
+      }
+    });
+       return this.state.max;
+  }
+  previous(e) {
+    this.setState({modalIndex: parseInt(this.state.modalIndex,10)-1}, () => {
+      return this.setState({modal: this.state.data[this.state.modalIndex].link});
+    });
+  }
+  next() {
+    this.setState({modalIndex: parseInt(this.state.modalIndex,10)+1}, () => {
+      if (this.state.modalIndex === this.state.data.length-1) {
+        this.showMore();
+        //console.log("no link");
+      }
+      return this.setState({modal: this.state.data[this.state.modalIndex].link});
+    });
+  }
+
+
   render () {
-    var elements = this.state.data.filter(this.filterAlbum).slice(0, this.state.max).map((item, index) => {
+    var elements = this.state.data.slice(0, this.state.max).map((item, index) => {
      return (
         <div
           onClick={::this.handleClick}
           data-link={item.link}
-          styleName="imgrContainer">
+          styleName="imgrContainer"
+          data-index={index}
+          key={item.id}>
+
          <img
           src={item.link}
           styleName="imgrImg" />
@@ -56,32 +91,17 @@ export default class Gallery extends Component {
           <div
             styleName={this.state.modal === "" ? "modalHidden" : "modalShowing"}
             onClick={::this.handleClickOff}>
-            <img src={this.state.modal} styleName="modal" />
+            <div styleName="modalInnerContainer">
+              <img src={this.state.modal} styleName="modal" />
+            </div>
+            <div styleName="flexContainer">
+              <button onClick={::this.previous} styleName="prevNext">Previous</button>
+              <button onClick={::this.next} styleName="prevNext">Next</button>
+            </div>
           </div>
         </div>
         <button styleName="showMore" onClick={::this.showMore}>Show more</button>
       </div>
     );
   }
-  handleClick(e) {
-    return this.setState({modal: e.target.dataset.link});
-  }
-  handleClickOff(e) {
-    return this.setState({modal: ""});
-  }
-  showMore(e) {
-    this.setState({max: this.state.max+5});
-    if (this.state.max >= this.state.data.length) {
-      this.setState({page: this.state.page+1});
-      return this.fetchData(this.state.page);
-    }
-    return this.state.max;
-  }
-  /*isEnough(e){
-    if (this.state.max >= this.state.data.length) {
-      this.setState({min: this.state.data.length});
-      this.setState({page: this.state.page+1});
-      return this.fetchData(this.state.page);
-    }
-  }*/
-}
+ }
