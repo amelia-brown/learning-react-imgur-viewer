@@ -59,7 +59,7 @@ export default class Gallery extends Component {
   next() {
     this.setState({modalIndex: parseInt(this.state.modalIndex,10)+1}, () => {
       if (this.state.modalIndex === this.state.data.length-1) {
-        this.showMore();
+        this.fetchData(this.state.page+1);
         //console.log("no link");
       }
       return this.setState({modal: this.state.data[this.state.modalIndex].link});
