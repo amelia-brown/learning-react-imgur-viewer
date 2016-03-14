@@ -1,7 +1,7 @@
 require('isomorphic-fetch');
-import 
+import promiseMiddleware from 'redux-promise-middleware';
 
-const get = (url) => {
+export default get = (url) => {
   return new Promise(resolve, reject) {
     fetch(url)
     .then(response => {
