@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import modal from './modal';
-import fetch
+import galleries from './galleries';
 
 const imgurApp = combineReducers({
-
+  galleries,
 })
 
 export default imgurApp
