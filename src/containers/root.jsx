@@ -2,8 +2,9 @@ import React, {Component, PropTypes} from 'react';
 import gallery from '../components/gallery.jsx';
 import promiseMiddleware from 'redux-promise-middleware';
 
+import { createStore, applyMiddleware } from 'redux';
+
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import reducers from '../modules';
 import Gallery from './galleries'
 

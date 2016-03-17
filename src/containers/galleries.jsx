@@ -13,10 +13,20 @@ import { read } from '../modules/galleries';
 
 export default class Gallery extends React.Component {
   componentWillMount() {
-    return (
-        <div>
-          {this.props.galleries}
-        </div>
-     )
+    return this.props.read();
+   }
+   render() {
+     filterAlbum(item) {
+       return !item.is_album;
+     };
+     const elements = this.props.galleries.data.filter(this.filterAlbum).map.((image) => {
+      return <div key={image.id} album={image.is_album}><img src={image.link}></img></div>
+     });
+     return (
+       <div>
+         Hello World
+         {elements}
+       </div>
+     );
    }
 };
