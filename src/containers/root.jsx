@@ -1,16 +1,17 @@
 import React, {Component, PropTypes} from 'react';
-import Gallery from '../components/gallery.jsx';
+import gallery from '../components/gallery.jsx';
 import promiseMiddleware from 'redux-promise-middleware';
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '../modules';
-
-const store = composeStoreWithMiddleware(reducers);
+import Gallery from './galleries'
 
 const composeStoreWithMiddleware = applyMiddleware(
   promiseMiddleware()
 )(createStore);
+
+const store = composeStoreWithMiddleware(reducers);
 
 export default class Root extends Component {
   render() {

@@ -1,18 +1,13 @@
-const get = () => {
-  //http request with fetch
-  //return JSON data from API
-  //
-  //Return error if request fails
-  //
-  //Returns PROMISE
-
+const get = (url) => {
   return new Promise((resolve, reject) => {
-    return resolve();
-
-    //fetch request
-    //
+      fetch(url).then(response => {
+        !response.ok && reject(response.error);
+        response.json.then(json => resolve(json));
+      }).catch(error => {
+        reject(error);
+      });
    });
-}
+ }
 
 const READ = 'galleries/READ';
 
@@ -21,8 +16,8 @@ const INITIAL_STATE= {
   data: [],
 }
 
-export const read = () => {
-  var promise = get();
+export const read = (pageNumber) => {
+  var promise = get('https://api.imgur.com/3/gallery/hot/viral/');
   return {
     type: READ,
     payload: {
@@ -31,7 +26,7 @@ export const read = () => {
   }
 }
 
-export default = (state = INITIAL_STATE, action) => {
+export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case `${READ}_PENDING`:
 
