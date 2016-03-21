@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { toggleModal, modal } from '../modules/modal';
 import { read } from '../modules/galleries';
 import CSSModules from 'react-css-modules';
 import styles from '../components/gallery-styles';
-import modal from './modal';
+import Modal from './modal';
 
 @connect( (state) => {
   return {
     galleries: state.galleries,
   }
 }, (dispatch) => {
-  return bindActionCreators({ read }, dispatch)
+  return bindActionCreators({ read, modal, toggleModal }, dispatch)
 })
 
 @CSSModules(styles)
@@ -23,12 +24,17 @@ export default class Gallery extends React.Component {
    filterAlbum(item) {
        return !item.is_album;
    };
+
    render() {
-     const elements = this.props.galleries.data.filter(this.filterAlbum).map((image) => {
+     const elements = this.props.galleries.data.filter(this.filterAlbum).map((image, index) => {
       return (
         <div
+          onClick={(e) => {
+             this.props.toggleModal();
+             return this.props.modal(image.link, index);
+          }}
           data-link={image.link}
-          data-index={image.index}
+          data-index={index}
           styleName="imgrContainer"
           key={image.id}>
 
@@ -41,11 +47,11 @@ export default class Gallery extends React.Component {
      });
      return (
        <div
-         onClick=render(<Modal />)
          className="main">
          <div styleName="galleryContainer">
            {elements}
          </div>
+       <Modal />
        </div>
      );
    }

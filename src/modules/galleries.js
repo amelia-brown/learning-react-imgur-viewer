@@ -11,11 +11,9 @@ const get = (url) => {
    });
  }
 
-
-
 const READ = 'galleries/READ';
 
-const INITIAL_STATE= {
+const INITIAL_STATE = {
   pending: false,
   data: [],
 };
