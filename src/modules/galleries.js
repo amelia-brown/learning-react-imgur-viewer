@@ -12,11 +12,26 @@ const get = (url) => {
  }
 
 const READ = 'galleries/READ';
+const LOAD_MORE = 'galleries/LOAD_MORE';
+const SHOW_MORE = 'galleries/SHOW_MORE';
+
 
 const INITIAL_STATE = {
   pending: false,
   data: [],
+  showCount: 8,
 };
+
+
+export const loadMore = (pageNumber) => {
+  var promise = get('https://api.imgur.com/3/gallery/hot/viral/' + pageNumber )
+  return {
+    type: LOAD_MORE,
+    payload: {
+      promise,
+    },
+  }
+}
 
 export const read = (pageNumber) => {
   var promise = get('https://api.imgur.com/3/gallery/hot/viral/');
@@ -25,6 +40,15 @@ export const read = (pageNumber) => {
     payload: {
       promise,
     },
+  }
+}
+
+export const showMore = (showCount) => {
+  return {
+    type: SHOW_MORE,
+    payload: {
+      showCount,
+    }
   }
 }
 
@@ -38,6 +62,12 @@ export default (state = INITIAL_STATE, action) => {
 
     case `${READ}_FULFILLED`:
       return Object.assign({}, { data: action.payload.data, pending: false });
+
+    case `${LOAD_MORE}_FULFILLED`:
+      return Object.assign({}, state, { data: state.data.concat(action.payload.data) });
+
+    case 'SHOW_MORE':
+      return Object.assign({}, state, {showCount: showCount+4});
 
     default:
       return state
