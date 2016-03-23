@@ -52,10 +52,10 @@ export default (state = INITIAL_STATE, action) => {
       return Object.assign({}, state, { showing: !state.showing });
 
     case PREVIOUS:
-      return Object.assign({}, state, { index: action.payload.index-- });
+      return Object.assign({}, state, { index: action.payload.index });
 
     case NEXT:
-      return Object.assign({}, state, { index: action.payload.index++ });
+      return Object.assign({}, state, { index: action.payload.index });
 
     default:
       return state;

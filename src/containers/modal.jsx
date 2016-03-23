@@ -23,30 +23,31 @@ export default class Modal extends React.Component {
   render() {
     return (
       <div
-        onClick={ (e) => {
-          return this.props.toggleModal()}
-        }
         styleName={this.props.modal.showing? "modalShowing" : "modalHidden"}
         >
+        <div
+          styleName="landing"
+          onClick={ (e) => {
+            return this.props.toggleModal()}
+          }
+        ></div>
         <div styleName="modalInnerContainer">
           <img src={this.props.modal.showing? this.props.galleries.data
             .filter(this.filterAlbum)
             [this.props.modal.index].link : undefined}
             styleName="modal" />
         </div>
-        <div styleName="flexContainer">
+                <div styleName="flexContainer">
           <button
             onClick={() => {
-              this.props.toggleModal();
-              return previous(this.props.modal.index);
+              return this.props.previous(this.props.modal.index-1);
             }}
             styleName="prevNext">
             Previous
           </button>
           <button
             onClick={() => {
-              this.props.toggleModal();
-              return next(this.props.modal.index);
+              return this.props.next(this.props.modal.index+1);
             }}
             styleName="prevNext">
             Next
