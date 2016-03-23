@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toggleModal, modal } from '../modules/modal';
+import { toggleModal, openModal } from '../modules/modal';
 import { read, loadMore, showMore } from '../modules/galleries';
 import CSSModules from 'react-css-modules';
 import styles from '../components/gallery-styles';
@@ -12,7 +12,7 @@ import Modal from './modal';
     galleries: state.galleries,
   }
 }, (dispatch) => {
-  return bindActionCreators({ read, modal, toggleModal, loadMore, showMore }, dispatch)
+  return bindActionCreators({ read, openModal, toggleModal, loadMore, showMore }, dispatch)
 })
 
 @CSSModules(styles)
@@ -28,17 +28,18 @@ export default class Gallery extends React.Component {
   let
 
   render() {
-    const elements = this.props.galleries.data.filter(this.filterAlbum).slice(0, this.props.galleries.showCount).map((image, index) => {
+    const elements = this.props.galleries.data
+    .filter(this.filterAlbum)
+    .slice(0, this.props.galleries.showCount)
+    .map((image, index) => {
       return (
         <div
-          onClick={(e) => {
-          this.props.toggleModal();
-        return this.props.modal(image.link, index);
-        }}
-          data-link={image.link}
-          data-index={index}
-          styleName="imgrContainer"
-          key={image.id}>
+          key={image.id}
+          onClick={() => {
+            this.props.toggleModal();
+            return this.props.openModal(index);
+          }}
+          styleName="imgrContainer">
           <img
             src={image.link}
             styleName="imgrImg">
@@ -54,9 +55,7 @@ export default class Gallery extends React.Component {
            {elements}
          </div>
          <button styleName="showMore"
-          onClick={() => {
-            return this.props.loadMore(page++);
-          }}
+          onClick={this.props.showMore}
          >Show more</button>
        <Modal />
        </div>

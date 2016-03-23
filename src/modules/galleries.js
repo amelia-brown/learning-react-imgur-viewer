@@ -43,12 +43,9 @@ export const read = (pageNumber) => {
   }
 }
 
-export const showMore = (showCount) => {
+export const showMore = () => {
   return {
     type: SHOW_MORE,
-    payload: {
-      showCount,
-    }
   }
 }
 
@@ -61,13 +58,13 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case `${READ}_FULFILLED`:
-      return Object.assign({}, { data: action.payload.data, pending: false });
+      return Object.assign({}, state, { data: action.payload.data, pending: false });
 
     case `${LOAD_MORE}_FULFILLED`:
       return Object.assign({}, state, { data: state.data.concat(action.payload.data) });
 
-    case 'SHOW_MORE':
-      return Object.assign({}, state, {showCount: showCount+4});
+    case SHOW_MORE:
+      return Object.assign({}, state, {showCount: state.showCount+4});
 
     default:
       return state

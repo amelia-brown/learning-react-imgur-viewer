@@ -1,16 +1,13 @@
-//modal action
+const OPEN_MODAL = 'modal/OPEN_MODAL';
+const TOGGLE_MODAL = 'modal/TOGGLE_MODAL';
+const PREVIOUS = 'modal/PREVIOUS';
+const NEXT = 'modal/NEXT';
 
-const OPEN_MODAL = 'OPEN_MODAL';
-const TOGGLE_MODAL = 'TOGGLE_MODAL';
-const PREVIOUS = 'PREVIOUS';
-const NEXT = 'NEXT';
-
-export const modal = (link, id) => {
+export const openModal = (index) => {
   return {
     type: OPEN_MODAL,
     payload: {
-      id,
-      link,
+      index,
     },
   }
 }
@@ -26,41 +23,39 @@ export const previous = (index) => {
     type: PREVIOUS,
     payload: {
       index,
-      link,
     }
   }
 }
+
 
 export const next = (index) => {
   return {
     type: NEXT,
     payload: {
       index,
-      link,
     }
 
   }
 }
 
 var INITIAL_STATE = {
-  id: undefined,
-  link: undefined,
+  index: undefined,
   showing: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
-    case 'OPEN_MODAL':
-      return Object.assign({}, state, { index: action.payload.index, link: action.payload.link, });
+    case OPEN_MODAL:
+      return Object.assign({}, state, { index: action.payload.index });
 
-    case 'TOGGLE_MODAL':
+    case TOGGLE_MODAL:
       return Object.assign({}, state, { showing: !state.showing });
 
-    case 'PREVIOUS':
-      return Object.assign({}, state, { index: action.payload.index, link: action.payload.link, });
+    case PREVIOUS:
+      return Object.assign({}, state, { index: action.payload.index-- });
 
-    case 'NEXT':
-      return Object.assign({}, state, { index: action.payload.index, link: action.payload.link, });
+    case NEXT:
+      return Object.assign({}, state, { index: action.payload.index++ });
 
     default:
       return state;
